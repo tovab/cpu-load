@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                         
+    "module": "ESNext",                          
+    "jsx": "react",                              
+    "strict": true,                              
+    "esModuleInterop": true,                     
+    "skipLibCheck": true,                        
+    "forceConsistentCasingInFileNames": true,    
+    "resolveJsonModule": true,                   
+    "moduleResolution": "node",                  
+    "allowSyntheticDefaultImports": true, 
+    "lib": ["DOM", "WebWorker"],
+    "types": ["node", "jest"] // Include Node.js and Jest types
+
+  },
+  "include": ["src", "public/heavyWorker.js"],                            // Files to include in the project
+  "exclude": ["node_modules", "dist"]            // Exclude unnecessary directories
+}

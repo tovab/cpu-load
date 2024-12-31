@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 200;
+}
+
+#top {
+  padding: 10px;
+  display: flex;
+  right: 0;
+  left: 0;
+  align-items: center;
+  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 7%);
+  background-color: #fff;
+  z-index: 200;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#main .section {
+  flex: calc(50% -20px);
+  padding: 10px
+}
+
+@media (max-width: 800px) {
+  #main.section {
+    flex: 100%;
+  }
+}
+
+.container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 600px;
+  width: 100%;
+}

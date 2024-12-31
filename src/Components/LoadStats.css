@@ -1,0 +1,41 @@
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stat {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #fdfdfd;
+}
+
+.stat p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.event-list {
+  list-style: none;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.event-list li {
+  font-size: 0.9rem;
+  padding: 5px 0;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.event-list li:last-child {
+  border-bottom: none;
+}
+
+.stat-number {
+  font-weight: bold;
+}
