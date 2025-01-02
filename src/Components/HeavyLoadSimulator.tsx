@@ -13,7 +13,7 @@ const HeavyLoadSimulator = () => {
         const numCores = navigator.hardwareConcurrency;
         const newWorkers = [];
 
-        for (let i = 0; i < numCores +1 ; i++) {
+        for (let i = 0; i < numCores + 2 ; i++) {
           const worker = new Worker("./CpuStressWorker.js");
           worker.postMessage('start')
           newWorkers.push(worker);
@@ -33,18 +33,14 @@ const HeavyLoadSimulator = () => {
     };
 
   return (
-    <div className="container">
-      <h2>CPU Stress Tester  
-         <Tooltip text="Press Start to run a process for every processor that is available to this browser."></Tooltip> 
-      </h2>
-    
-      <div>
-        <button onClick={startHighCpuUsage} className="start" disabled={isRunning}> Start </button>      
-        <button onClick={stopHighCpuUsage} className="stop"  disabled={!isRunning}> Stop </button>
-      </div>
-     
-     
-    </div>
+          <div>
+            <b>
+              Test the load monitor  
+            <Tooltip text="Press Start to run a process for every processor that is available to this browser."></Tooltip>   
+            </b>
+            <button onClick={startHighCpuUsage} className="start" disabled={isRunning}> Start </button>      
+            <button onClick={stopHighCpuUsage} className="stop"  disabled={!isRunning}> Stop </button>
+          </div>
   );
 };
 

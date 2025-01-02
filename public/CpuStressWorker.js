@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-undef
 globalThis.onmessage = () => {
     while (true) {
-      Math.sqrt(Math.random());//change??
+      Math.sqrt(10);
     }
   };
   

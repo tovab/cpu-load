@@ -2,15 +2,20 @@
   text-align: center;
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 200;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
 }
 
 #top {
   padding: 10px;
   display: flex;
+  justify-content: flex-end;
   right: 0;
   left: 0;
   align-items: center;
-  box-shadow: 0 0 8px 8px rgba(0, 0, 0, 7%);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 7%);
   background-color: #fff;
   z-index: 200;
 }
@@ -24,20 +29,12 @@ h2 {
   justify-content: center;
 }
 
-#main {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 #main .section {
-  flex: calc(50% -20px);
-  padding: 10px
+  padding: 10px;
 }
 
-@media (max-width: 800px) {
-  #main.section {
-    flex: 100%;
-  }
+.chart-container {
+  width: 800px;
 }
 
 .container {

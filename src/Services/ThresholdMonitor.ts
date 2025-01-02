@@ -1,43 +1,48 @@
-type Mode = "EXCEEDED" | "RECOVERED" | "NONE";
+import { MonitorMode } from "../types";
 
-export const ThresholdMonitor = function (
-  threshold: number,
-  duration: number,
-  onExceed: () => void,
-  onRecover: () => void
-) {
+/** Handles the change of state of going above and below a threshold over a period of time. */
+export const ThresholdMonitor = function (threshold: number, duration: number) {
   let highLoadStartTime: Date | undefined = undefined;
   let recoveryStartTime: Date | undefined = undefined;
 
-  let currentMode: Mode;
+  let currentMode: MonitorMode;
 
-  function update(value: number, time: Date) {
-    const isDurationPassed = (duration: number, start: Date) =>
-      time.getTime() - start.getTime() >= duration;
+  const isDurationPassed = (duration: number, start: Date, time: Date) =>
+    time.getTime() - start.getTime() >= duration;
 
+  function check(
+    value: number,
+    time: Date
+  ): { changed: boolean; currentMode: MonitorMode } {
     if (value >= threshold) {
       recoveryStartTime = undefined;
-      if (currentMode !== "EXCEEDED") {
-        highLoadStartTime ??= time;
-        if (isDurationPassed(duration, highLoadStartTime)) {
-          onExceed();
-          currentMode = "EXCEEDED";
-        }
-      }
-    } else {
-      highLoadStartTime = undefined;
-      if (currentMode !== "RECOVERED") {
-        recoveryStartTime ??= time;
+      highLoadStartTime ??= time;
 
-        if (isDurationPassed(duration, recoveryStartTime)) {
-          onRecover();
-          currentMode = "RECOVERED";
-        }
+      if (
+        currentMode === "EXCEEDED" ||
+        !isDurationPassed(duration, highLoadStartTime, time)
+      ) {
+        return { changed: false, currentMode };
       }
+      currentMode = "EXCEEDED";
+      return { changed: true, currentMode };
     }
+    //under threshold:
+    highLoadStartTime = undefined;
+    recoveryStartTime ??= time;
+
+    if (
+      currentMode === "RECOVERED" ||
+      !isDurationPassed(duration, recoveryStartTime, time)
+    ) {
+      return { changed: false, currentMode };
+    }
+
+    currentMode = "RECOVERED";
+    return { changed: true, currentMode };
   }
 
   return {
-    update,
+    check,
   };
 };
