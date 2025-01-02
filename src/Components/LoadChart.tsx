@@ -10,19 +10,18 @@ import {
   Filler,
 } from 'chart.js';
 import React from 'react';
-import { useAPI } from '../apiContext';
+import { CpuLoad } from '../types';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Legend, Filler);
 
-const LoadChart = () => {
-    const data  = useAPI();
+const LoadChart = (props:  {loadData: CpuLoad[]}) => {
 
     const chartData = {
       title: "CPU Load",
-        labels: data.loadData?.map(point => new Date(point.time).toLocaleTimeString()),
+        labels: props.loadData.map(point => new Date(point.time).toLocaleTimeString()),
         datasets: [{
             label: 'Load Average',
-            data: data.loadData?.map(point => point.average),
+            data: props.loadData.map(point => point.average),
             tension: .2,
             backgroundColor: 'gray',
             fill: true
@@ -36,9 +35,7 @@ const LoadChart = () => {
       },
     };
   
-   return (
-    <Line data={chartData} options={options} />
-    );
+   return (<Line data={chartData} options={options} />);
   };
   
   export default LoadChart;

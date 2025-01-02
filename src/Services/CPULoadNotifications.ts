@@ -1,15 +1,15 @@
-function showNotification(title: string) {
+import { MonitorMode } from "../types";
+
+const MESSAGES: Record<MonitorMode, string> = {
+  EXCEEDED: "High CPU Load",
+  RECOVERED: "Recovered",
+};
+
+export function notify(mode: MonitorMode) {
   navigator.serviceWorker.ready.then((registration) => {
     registration?.active?.postMessage({
       type: "SHOW_NOTIFICATION",
-      title,
+      title: MESSAGES[mode],
     });
   });
-}
-export function alertExceeded() {
-  showNotification("High CPU Load");
-}
-
-export function notifyRecovered() {
-  showNotification("Recovered");
 }
