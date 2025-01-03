@@ -14,7 +14,7 @@ import { CpuLoad } from '../types';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Legend, Filler);
 
-const LoadChart = (props:  {loadData: CpuLoad[]}) => {
+const CPULoadChart = (props:  {loadData: CpuLoad[]}) => {
 
     const chartData = {
       title: "CPU Load",
@@ -33,10 +33,11 @@ const LoadChart = (props:  {loadData: CpuLoad[]}) => {
       scales: {
         y: {max: 1.5, min: 0, ticks: {stepSize: 0.1} },
       },
+      layout: { padding: { left: 80 } }
     };
   
    return (<Line data={chartData} options={options} />);
   };
   
-  export default LoadChart;
+  export default CPULoadChart;
   

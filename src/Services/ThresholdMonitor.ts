@@ -16,25 +16,26 @@ export const ThresholdMonitor = function (threshold: number, duration: number) {
   ): { changed: boolean; currentMode: MonitorMode } {
     if (value >= threshold) {
       recoveryStartTime = undefined;
-      if (currentMode === "EXCEEDED") return { changed: false, currentMode };
-
       highLoadStartTime ??= time;
-      if (isDurationPassed(duration, highLoadStartTime, time)) {
-        currentMode = "EXCEEDED";
+
+      if (
+        currentMode === "EXCEEDED" ||
+        !isDurationPassed(duration, highLoadStartTime, time)
+      ) {
+        return { changed: false, currentMode };
+      }
+      currentMode = "EXCEEDED";
+      return { changed: true, currentMode };
+    }
+    //under threshold:
+    highLoadStartTime = undefined;
+
+    if(currentMode === "EXCEEDED"){
+      recoveryStartTime ??=  time;
+      if(isDurationPassed(duration, recoveryStartTime, time)) {
+        currentMode = "RECOVERED";
         return { changed: true, currentMode };
       }
-      return { changed: false, currentMode };
-    }
-
-    highLoadStartTime = undefined;
-    if (currentMode === "RECOVERED") {
-      return { changed: false, currentMode };
-    }
-    recoveryStartTime ??= time;
-
-    if (isDurationPassed(duration, recoveryStartTime, time)) {
-      currentMode = "RECOVERED";
-      return { changed: true, currentMode };
     }
     return { changed: false, currentMode };
   }
