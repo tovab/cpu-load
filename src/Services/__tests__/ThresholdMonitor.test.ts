@@ -103,4 +103,16 @@ describe("ThresholdMonitor", () => {
     expect(result.changed).toBe(false);
     expect(result.currentMode).toBe("EXCEEDED");
   });
+
+  it("should not be in recovered mode if did not exceed", () => {
+    const startTime = new Date();
+    monitor.check(threshold / 2, new Date());
+   
+    const result = monitor.check(
+      threshold / 2,
+      new Date(startTime.getTime() + duration)
+    );
+    expect(result.changed).toBe(false);
+    expect(result.currentMode).toBeUndefined();
+  });
 });

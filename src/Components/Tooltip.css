@@ -14,7 +14,7 @@
   padding: 5px;
   position: absolute;
   z-index: 1;
-  bottom: 125%;
+  top: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -31,16 +31,13 @@
 .tooltip-container:hover .tooltip-text::after {
   content: "";
   position: absolute;
-  top: 100%;
-  /* Below the tooltip */
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
-  /* Arrow */
+  border-color: transparent transparent #555 transparent;
 }
-
 
 .info-icon {
   width: 20px;

@@ -1,22 +1,25 @@
 
 import React, { useEffect, useState } from "react";
 import './App.css';
-import Stats from "./LoadStats";
-import LoadChart from "./LoadChart";
-import HeavyLoadSimulator from "./HeavyLoadSimulator";
-import { ThresholdMonitor } from "../Services/ThresholdMonitor";
-import { FETCH_INTERVAL_SECONDS, HIGH_LOAD_THRESHOLD, LOAD_ALERT_THRESHOLD_MINUTES, TIME_WINDOW_MINUTES } from "../config";
-import { notify } from "../Services/CPULoadNotifications";
-import { getData } from "../Services/data";
-import { CpuLoad, MonitorHistory } from "../types";
+import Stats from "./Components/CPULoadStats";
+import CPULoadChart from "./Components/CPULoadChart";
+import HeavyLoadSimulator from "./Components/HeavyLoadSimulator";
+import { ThresholdMonitor } from "./Services/ThresholdMonitor";
+import { FETCH_INTERVAL_SECONDS, HIGH_LOAD_THRESHOLD, LOAD_ALERT_THRESHOLD_MINUTES, TIME_WINDOW_MINUTES } from "./Constants";
+import { notify, setupNotificationService } from "./Services/CPULoadNotifications";
+import { getData } from "./Services/Data";
+import { CpuLoad, MonitorHistory } from "./types";
 
 
 const TIME_WINDOW = TIME_WINDOW_MINUTES * 60 * 1000; 
 const FETCH_INTERVAL = FETCH_INTERVAL_SECONDS * 1000; 
 const LOAD_ALERT_THRESHOLD = LOAD_ALERT_THRESHOLD_MINUTES * 60 * 1000; 
 
+const isInTimeWindow = (data: CpuLoad) =>  new Date(data.time).getTime() >= new Date().getTime() - TIME_WINDOW;
 
 const thresholdMonitor = ThresholdMonitor(HIGH_LOAD_THRESHOLD, LOAD_ALERT_THRESHOLD);
+
+setupNotificationService();
 
 export default function App() {
 
@@ -28,7 +31,7 @@ export default function App() {
       try {
         const data = await getData();
         setCurrentLoad(data.average)        
-        setLoadData((prevData) => [...prevData.filter((data: CpuLoad)  => new Date(data.time).getTime() >= new Date().getTime() - TIME_WINDOW), data]);
+        setLoadData((prevData) => [...prevData.filter(isInTimeWindow), data]);
        
         const {currentMode, changed } = thresholdMonitor.check(data.average, new Date(data.time));
         if(changed){
@@ -38,6 +41,7 @@ export default function App() {
             }));
             notify(currentMode);
         }
+
       } catch(error) {
         console.log('Could not fetch data.', error)
       }     
@@ -48,23 +52,17 @@ export default function App() {
       const intervalId = setInterval(fetchData, FETCH_INTERVAL);
       return () => clearInterval(intervalId);
     }, []);
-  return (
-      <div className="App">
-        <div id="top">
-          <img src="../assets/dd-favicon.png" alt="DataDog Logo" height="40" />
-        </div>
-        <div id="main">
-          
-          <div className="section"> 
-            <HeavyLoadSimulator></HeavyLoadSimulator> 
-            <Stats highLoadTimes = {monitorHistory.EXCEEDED} recoveryTimes={monitorHistory.RECOVERED} currentLoad={currentLoad} />
+    return (
+        <div className="App">
+            <div className="stats-container section"> 
+              <HeavyLoadSimulator></HeavyLoadSimulator> 
+              <Stats highLoadTimes = {monitorHistory.EXCEEDED} recoveryTimes={monitorHistory.RECOVERED} currentLoad={currentLoad} />
+            </div>
+            <div className="section chart-container" > 
+              <CPULoadChart loadData={loadData}/>
+            </div>
           </div>
-          <div className="section"> 
-            <LoadChart loadData={loadData}/>
-          </div>
-        </div>
-      </div>
-  );
+    );
 }
 
 
