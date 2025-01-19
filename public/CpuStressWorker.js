@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-undef
-globalThis.onmessage = () => {
+onmessage = () => {
     while (true) {
       Math.sqrt(10);
     }
