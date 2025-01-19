@@ -1,6 +1,5 @@
 # CPU Load Monitor
 
-(Based on the requirements described [here](https://app.greenhouse.io/tests/5a6c8661af03f5050ac3760cd413e845))\
 The application retrieves load data every 10 seconds.\
 The application will show a notification when the load value is at 1 or more for at least 2 minutes.\
 The application will show a notification when the load value is recovered (load value under 1 for at least 2 minutes).\
